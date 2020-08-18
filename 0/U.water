@@ -1,0 +1,55 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  7
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      binary;
+    class       volVectorField;
+    location    "0";
+    object      U.water;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 1 -1 0 0 0 0];
+
+internalField   uniform (0 0 0);
+
+boundaryField
+{
+    walls
+    {
+        type            noSlip;
+    }
+
+    top
+    {
+        type            pressureInletOutletVelocity;
+        phi             phi.water;
+        inletValue      uniform (0 0 0);
+        value           uniform (0 0 0);
+    }
+
+    bottom
+    {
+        type            interstitialInletVelocity;
+        inletVelocity   uniform (0 0 0.015);
+        value           uniform (0 0 0.015);
+//　　　　　　　　　dp=0.2mm粒子の最小流動化速度
+//        phi             phi.water;
+//phi.water is not required by inlet patch
+        alpha           alpha.water;
+    }
+
+    frontAndBack
+    {
+        type            symmetry;
+    }
+}
+
+
+// ************************************************************************* //
